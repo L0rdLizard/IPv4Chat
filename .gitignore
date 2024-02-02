@@ -1,0 +1,13 @@
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+.vscode
+tempCodeRunnerFile.*
+build/
+
+*.pcap
+*.csv
