@@ -6,17 +6,20 @@
 #include <unistd.h>
 #include <pthread.h>
 
-const int PORT = 8888;
-const char* BROADCAST_IP = "255.255.255.255"; // Широковещательный адрес IPv4
+
+// const char* BROADCAST_IP = "255.255.255.255"; // Широковещательный адрес IPv4
+const char* BROADCAST_IP = "127.0.0.1"; // Широковещательный адрес IPv4
 const int MAX_MESSAGE_SIZE = 1007;
 
 class IPv4Chat {
 private:
+    int PORT;
     int sock_;
     sockaddr_in recvAddr_;
 
 public:
-    IPv4Chat() : sock_(-1) {
+    IPv4Chat(int PORT) : sock_(-1) {
+        IPv4Chat::PORT = PORT;
         memset(&recvAddr_, 0, sizeof(recvAddr_));
         recvAddr_.sin_family = AF_INET;
         recvAddr_.sin_port = htons(PORT);
@@ -35,6 +38,13 @@ public:
             std::cerr << "Error: Could not create socket\n";
             return false;
         }
+
+        // sockaddr_in recvAddr__;
+
+        // memset(&recvAddr__, 0, sizeof(recvAddr__));
+        // recvAddr__.sin_family = AF_INET;
+        // recvAddr__.sin_port = htons(8888);
+        // recvAddr__.sin_addr.s_addr = htonl(INADDR_ANY);
 
         if (bind(sock_, (sockaddr*)&recvAddr_, sizeof(recvAddr_)) == -1) {
             std::cerr << "Error: Bind failed\n";
@@ -71,7 +81,8 @@ public:
         sockaddr_in broadcastAddr;
         memset(&broadcastAddr, 0, sizeof(broadcastAddr));
         broadcastAddr.sin_family = AF_INET;
-        broadcastAddr.sin_port = htons(PORT);
+        // broadcastAddr.sin_port = htons(PORT);
+        broadcastAddr.sin_port = htons(8888);
         inet_pton(AF_INET, BROADCAST_IP, &broadcastAddr.sin_addr);
 
         if (sendto(sock, message.c_str(), message.length(), 0,
@@ -113,8 +124,8 @@ void* senderThread(void* arg) {
     return nullptr;
 }
 
-int main() {
-    IPv4Chat chat;
+int main(int argc, char const* argv[]) {
+    IPv4Chat chat(std::atoi(argv[1]));
     if (!chat.initializeReceiver()) {
         return 1;
     }
@@ -128,11 +139,3 @@ int main() {
 
     return 0;
 }
-
-// #include <iostream>
-
-// int main() {
-    
-//     std::cout << "Hello, World!" << std::endl;
-//     return 0;
-// }
