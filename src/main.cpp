@@ -7,8 +7,8 @@
 #include <pthread.h>
 
 
-// const char* BROADCAST_IP = "255.255.255.255"; // Широковещательный адрес IPv4
-const char* BROADCAST_IP = "127.0.0.1"; // Широковещательный адрес IPv4
+const char* BROADCAST_IP = "255.255.255.255";
+// const char* BROADCAST_IP = "127.0.0.1"; 
 const int MAX_MESSAGE_SIZE = 1007;
 
 class IPv4Chat {
@@ -21,9 +21,12 @@ public:
     IPv4Chat(int PORT) : sock_(-1) {
         IPv4Chat::PORT = PORT;
         memset(&recvAddr_, 0, sizeof(recvAddr_));
+
         recvAddr_.sin_family = AF_INET;
         recvAddr_.sin_port = htons(PORT);
         recvAddr_.sin_addr.s_addr = htonl(INADDR_ANY);
+        // recvAddr_.sin_addr.s_addr = htonl(INADDR_BROADCAST);
+        inet_pton(AF_INET, BROADCAST_IP, &recvAddr_.sin_addr);
     }
 
     ~IPv4Chat() {
@@ -80,9 +83,19 @@ public:
 
         sockaddr_in broadcastAddr;
         memset(&broadcastAddr, 0, sizeof(broadcastAddr));
+
         broadcastAddr.sin_family = AF_INET;
-        // broadcastAddr.sin_port = htons(PORT);
-        broadcastAddr.sin_port = htons(8888);
+        broadcastAddr.sin_port = htons(PORT);
+        // broadcastAddr.sin_port = htons(8888);
+
+        int broadcastPermission = 1;
+        if (setsockopt(sock_, SOL_SOCKET, SO_BROADCAST, (void *)&broadcastPermission, sizeof(broadcastPermission)) == -1){
+            std::cerr << "Error: Setsock failed\n";
+            close(sock_);
+            return;
+        }
+
+
         inet_pton(AF_INET, BROADCAST_IP, &broadcastAddr.sin_addr);
 
         if (sendto(sock, message.c_str(), message.length(), 0,
@@ -105,7 +118,7 @@ void* senderThread(void* arg) {
     std::string nickname;
     std::cout << "Enter your nickname: ";
     std::cin >> nickname;
-    std::cin.ignore(); // Clear input buffer
+    std::cin.ignore(); 
     while (true) {
         std::string message;
         std::cout << "Enter message: ";
