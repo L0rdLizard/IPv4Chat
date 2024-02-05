@@ -13,6 +13,7 @@ const int MAX_MESSAGE_SIZE = 1007;
 
 class IPv4Chat {
 private:
+    std::string IP;
     int PORT;
     int sock_;
     sockaddr_in recvAddr_;
@@ -69,6 +70,13 @@ public:
                 std::cerr << "Error: Failed to receive message\n";
                 continue;
             }
+
+            std::string address = inet_ntoa(senderAddr.sin_addr);
+
+            if (IP == address){
+                continue;
+            }
+
             buffer[bytesRecv] = '\0';
             std::cout << "Received message from " << inet_ntoa(senderAddr.sin_addr) << ": " << buffer << std::endl;
         }
