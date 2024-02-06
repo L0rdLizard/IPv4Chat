@@ -19,7 +19,8 @@ private:
     sockaddr_in recvAddr_;
 
 public:
-    IPv4Chat(int PORT) : sock_(-1) {
+    IPv4Chat(std::string IP ,int PORT) : sock_(-1) {
+        IPv4Chat::IP = IP;
         IPv4Chat::PORT = PORT;
         memset(&recvAddr_, 0, sizeof(recvAddr_));
 
@@ -146,7 +147,12 @@ void* senderThread(void* arg) {
 }
 
 int main(int argc, char const* argv[]) {
-    IPv4Chat chat(std::atoi(argv[1]));
+    if (argc != 3) {
+        std::cerr << "Usage: " << argv[0] << " <IP> <PORT>\n";
+        return 1;
+    }
+
+    IPv4Chat chat(argv[1] , std::atoi(argv[2]));
     if (!chat.initializeReceiver()) {
         return 1;
     }
