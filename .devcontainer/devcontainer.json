@@ -24,7 +24,8 @@
 				"ms-vscode.cpptools-extension-pack"
 			]
 		}
-	}
+	},
+	"mounts": ["source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"]
 
 	// Configure tool-specific properties.
 	// "customizations": {},
