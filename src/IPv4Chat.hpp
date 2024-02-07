@@ -1,5 +1,4 @@
-#ifndef IPV4CHAT_HPP
-#define IPV4CHAT_HPP
+#pragma once
 
 #include <iostream>
 #include <cstring>
@@ -24,4 +23,3 @@ public:
     void send(const std::string& message);
 };
 
-#endif /* IPV4CHAT_HPP */
