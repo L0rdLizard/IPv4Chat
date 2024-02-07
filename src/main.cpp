@@ -2,6 +2,8 @@
 #include <pthread.h>
 #include "IPv4Chat.hpp"
 
+const int MAX_MESSAGE_SIZE = 1007;
+
 void* receiverThread(void* arg) {
     IPv4Chat* chat = static_cast<IPv4Chat*>(arg);
     chat->receive();
