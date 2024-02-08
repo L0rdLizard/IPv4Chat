@@ -1,22 +1,16 @@
 @echo off
-setlocal
+setlocal  
 
-set "container1=user1"
-set "container2=user2"
+set "containers=user1 user2"
 
-docker stop %container1% > nul 2>&1
-if not errorlevel 1 (
-        echo Stopped container: %container1%
+echo Stopping containers: %containers%
+for %%i in (%containers%) do (
+    docker stop %%i 2>&1
+    if not errorlevel 1 (
+        echo Container %%i stopped
     ) else (
-        echo %container1% not found or already stopped.
+        echo Container %%i not found
     )
-
-docker stop %container2% > nul 2>&1
-if not errorlevel 1 (
-        echo Stopped container: %container2%
-    ) else (
-        echo %container2% not found or already stopped.
-    )    
-
+)
 
 endlocal
