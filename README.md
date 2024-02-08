@@ -3,7 +3,15 @@ Project on github: https://github.com/L0rdLizard/IPv4Chat
 
 ## About code
 
+This project implements the “IPv4 chat” program, which exchanges text broadcast (IPv4 UDP broadcast) messages over a local network segment, with copies running on other machines physically connected to one logical network segment. 
 
+The project uses the broadcast IPv4 address 255.255.255.255. 
+
+The client code contains a reception thread and a sending thread with an input limit of up to 1007 bytes. 
+
+The project is built through the run_first.sh and run_second.sh scripts into docker containers in a common virtual network. 
+
+The image for docker containers is written using a multi-stage build and is optimized.
 
 ## Getting started
 ### 1. Docker network
