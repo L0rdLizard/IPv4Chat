@@ -1,5 +1,4 @@
 # UDP Broadcast IPv4 chat
-Project on github: https://github.com/L0rdLizard/IPv4Chat
 
 ## About code
 
